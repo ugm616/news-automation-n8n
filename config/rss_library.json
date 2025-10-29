@@ -1,0 +1,44 @@
+{
+  "niches": {
+    "celebrity": [
+      {"name": "E! News", "url": "https://www.eonline.com/syndication/feeds/rssfeeds/topstories.xml"},
+      {"name": "TMZ", "url": "https://www.tmz.com/rss.xml"},
+      {"name": "People", "url": "https://people.com/feed/"}
+    ],
+    "sports": [
+      {"name": "ESPN", "url": "https://www.espn.com/espn/rss/news"},
+      {"name": "Sports Illustrated", "url": "https://www.si.com/rss/si_topstories.rss"},
+      {"name": "Bleacher Report", "url": "https://bleacherreport.com/articles/feed"}
+    ],
+    "politics": [
+      {"name": "Politico", "url": "https://www.politico.com/rss/politics08.xml"},
+      {"name": "The Hill", "url": "https://thehill.com/feed/"},
+      {"name": "Reuters Politics", "url": "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"}
+    ],
+    "music": [
+      {"name": "Billboard", "url": "https://www.billboard.com/feed/"},
+      {"name": "Rolling Stone", "url": "https://www.rollingstone.com/feed/"},
+      {"name": "Pitchfork", "url": "https://pitchfork.com/rss/news/"}
+    ],
+    "tech": [
+      {"name": "TechCrunch", "url": "https://techcrunch.com/feed/"},
+      {"name": "The Verge", "url": "https://www.theverge.com/rss/index.xml"},
+      {"name": "Ars Technica", "url": "http://feeds.arstechnica.com/arstechnica/index"}
+    ],
+    "finance": [
+      {"name": "Bloomberg", "url": "https://www.bloomberg.com/feed/podcast/bloomberg-businessweek"},
+      {"name": "CNBC", "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"},
+      {"name": "MarketWatch", "url": "https://www.marketwatch.com/rss/"}
+    ],
+    "gaming": [
+      {"name": "IGN", "url": "https://feeds.ign.com/ign/news"},
+      {"name": "GameSpot", "url": "https://www.gamespot.com/feeds/mashup/"},
+      {"name": "Polygon", "url": "https://www.polygon.com/rss/index.xml"}
+    ],
+    "crypto": [
+      {"name": "CoinDesk", "url": "https://www.coindesk.com/arc/outboundfeeds/rss/"},
+      {"name": "CoinTelegraph", "url": "https://cointelegraph.com/rss"},
+      {"name": "Decrypt", "url": "https://decrypt.co/feed"}
+    ]
+  }
+}
