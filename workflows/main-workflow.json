@@ -1,0 +1,616 @@
+{
+  "name": "News Automation - Main Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "id": "schedule-trigger"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.RSS_FEED_URL_1}}",
+        "options": {
+          "limit": 10
+        }
+      },
+      "name": "RSS Feed Reader 1",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [450, 200],
+      "id": "rss-feed-1"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.RSS_FEED_URL_2}}",
+        "options": {
+          "limit": 10
+        }
+      },
+      "name": "RSS Feed Reader 2",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "id": "rss-feed-2"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.RSS_FEED_URL_3}}",
+        "options": {
+          "limit": 10
+        }
+      },
+      "name": "RSS Feed Reader 3",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [450, 400],
+      "id": "rss-feed-3"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition"
+      },
+      "name": "Merge RSS Feeds",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [650, 300],
+      "id": "merge-feeds"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate story hash for duplicate detection\nconst crypto = require('crypto');\n\nfor (const item of $input.all()) {\n  const url = item.json.link || item.json.url;\n  const title = item.json.title;\n  const hash = crypto.createHash('sha256').update(url + title).digest('hex');\n  item.json.story_hash = hash;\n}\n\nreturn $input.all();"
+      },
+      "name": "Generate Story Hashes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300],
+      "id": "generate-hashes"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT story_hash FROM processed_stories WHERE processed_date >= NOW() - INTERVAL '7 days'",
+        "options": {}
+      },
+      "name": "Check Duplicates",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [1050, 300],
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "PostgreSQL account"
+        }
+      },
+      "id": "check-duplicates"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter out duplicate stories\nconst processedHashes = $('Check Duplicates').all().map(item => item.json.story_hash);\nconst stories = $('Generate Story Hashes').all();\n\nconst uniqueStories = stories.filter(story => \n  !processedHashes.includes(story.json.story_hash)\n);\n\n// Sort by publish date and take top 5\nconst topStories = uniqueStories\n  .sort((a, b) => new Date(b.json.pubDate) - new Date(a.json.pubDate))\n  .slice(0, 5);\n\nreturn topStories;"
+      },
+      "name": "Select Top 5 Stories",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 300],
+      "id": "select-top-5"
+    },
+    {
+      "parameters": {},
+      "name": "Loop Over Stories",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1450, 300],
+      "id": "loop-stories"
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "model": "gpt-4-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{$env.LONGFORM_SCRIPT_PROMPT}}"
+            },
+            {
+              "role": "user",
+              "content": "Story Title: {{$json.title}}\nContent: {{$json.content}}\nKeywords: {{$json.keywords}}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 500
+        }
+      },
+      "name": "Generate Long-Form Script",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1650, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "2",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "gen-longform-script"
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "model": "gpt-4-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{$env.TEASER_SCRIPT_PROMPT}}"
+            },
+            {
+              "role": "user",
+              "content": "Story Title: {{$json.title}}\nContent: {{$json.content}}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 150
+        }
+      },
+      "name": "Generate Teaser Script",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1650, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "2",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "gen-teaser-script"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pexels.com/v1/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "pexelsApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{$json.keywords}}"
+            },
+            {
+              "name": "per_page",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "name": "Search Images (Pexels)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1850, 200],
+      "credentials": {
+        "pexelsApi": {
+          "id": "3",
+          "name": "Pexels account"
+        }
+      },
+      "id": "search-images"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/{{$env.ELEVENLABS_VOICE_ID}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "elevenLabsApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{$node[\"Generate Long-Form Script\"].json.message.content}}"
+            },
+            {
+              "name": "model_id",
+              "value": "eleven_monolingual_v1"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "name": "Generate Voiceover (Long)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2050, 200],
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "4",
+          "name": "ElevenLabs account"
+        }
+      },
+      "id": "gen-voice-long"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/{{$env.ELEVENLABS_VOICE_ID}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "elevenLabsApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{$node[\"Generate Teaser Script\"].json.message.content}}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "name": "Generate Voiceover (Teaser)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2050, 400],
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "4",
+          "name": "ElevenLabs account"
+        }
+      },
+      "id": "gen-voice-teaser"
+    },
+    {
+      "parameters": {
+        "command": "python3 {{$env.SCRIPT_DIR}}/generate_subtitles.py '{{$json}}'"
+      },
+      "name": "Generate Subtitles",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [2250, 300],
+      "id": "gen-subtitles"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Story Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [2450, 300],
+      "id": "merge-story-data"
+    },
+    {
+      "parameters": {},
+      "name": "Wait for All Stories",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [2650, 300],
+      "webhookId": "story-processing-complete",
+      "id": "wait-all-stories"
+    },
+    {
+      "parameters": {
+        "command": "bash {{$env.SCRIPT_DIR}}/create_longform_video.sh '{{$json}}'"
+      },
+      "name": "Create Long-Form Video",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [2850, 300],
+      "id": "create-longform"
+    },
+    {
+      "parameters": {
+        "command": "bash {{$env.SCRIPT_DIR}}/upload_to_rumble.sh '{{$json}}'"
+      },
+      "name": "Upload to Rumble",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [3050, 300],
+      "id": "upload-rumble"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "rumble_video_url",
+        "value": "={{$json.video_url}}"
+      },
+      "name": "Store Rumble URL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [3250, 300],
+      "id": "store-rumble-url"
+    },
+    {
+      "parameters": {},
+      "name": "Loop for Teasers",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [3450, 300],
+      "id": "loop-teasers"
+    },
+    {
+      "parameters": {
+        "command": "bash {{$env.SCRIPT_DIR}}/create_teaser_video.sh '{{$json}}'"
+      },
+      "name": "Create Teaser Video",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [3650, 300],
+      "id": "create-teaser"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{$json.title}} #shorts",
+        "videoUrl": "={{$json.video_path}}",
+        "description": "Full story: {{$node[\"Store Rumble URL\"].json.rumble_video_url}}"
+      },
+      "name": "Upload to YouTube Shorts",
+      "type": "n8n-nodes-base.youtube",
+      "typeVersion": 1,
+      "position": [3850, 200],
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "5",
+          "name": "YouTube account"
+        }
+      },
+      "id": "upload-youtube"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/{{$env.INSTAGRAM_USER_ID}}/media",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "video_url",
+              "value": "={{$json.video_url}}"
+            },
+            {
+              "name": "caption",
+              "value": "={{$json.title}} - Full story in bio!"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.INSTAGRAM_ACCESS_TOKEN}}"
+            }
+          ]
+        }
+      },
+      "name": "Upload to Instagram Reels",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3850, 300],
+      "id": "upload-instagram"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/{{$env.FACEBOOK_PAGE_ID}}/videos",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file_url",
+              "value": "={{$json.video_url}}"
+            },
+            {
+              "name": "description",
+              "value": "Full story: {{$node[\"Store Rumble URL\"].json.rumble_video_url}}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.FACEBOOK_PAGE_TOKEN}}"
+            }
+          ]
+        }
+      },
+      "name": "Upload to Facebook Reels",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3850, 400],
+      "id": "upload-facebook"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Upload Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [4050, 300],
+      "id": "merge-uploads"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": "processed_stories",
+        "columns": "story_hash,story_url,story_title,rumble_video_url,youtube_shorts_url,instagram_reel_url,facebook_reel_url,processed_date",
+        "options": {}
+      },
+      "name": "Log to Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [4250, 300],
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "PostgreSQL account"
+        }
+      },
+      "id": "log-database"
+    },
+    {
+      "parameters": {
+        "content": "=Workflow completed successfully!\n\nProcessed {{$json.stories_count}} stories\nCreated 1 long-form video\nCreated {{$json.teasers_count}} teaser videos\nUploaded to {{$json.platforms_count}} platforms\n\nRumble URL: {{$json.rumble_url}}",
+        "channel": "#news-automation"
+      },
+      "name": "Send Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [4450, 300],
+      "credentials": {
+        "slackApi": {
+          "id": "6",
+          "name": "Slack account"
+        }
+      },
+      "id": "send-notification"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Reader 1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Feed Reader 2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Feed Reader 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Reader 1": {
+      "main": [
+        [
+          {
+            "node": "Merge RSS Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Reader 2": {
+      "main": [
+        [
+          {
+            "node": "Merge RSS Feeds",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "RSS Feed Reader 3": {
+      "main": [
+        [
+          {
+            "node": "Merge RSS Feeds",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge RSS Feeds": {
+      "main": [
+        [
+          {
+            "node": "Generate Story Hashes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Story Hashes": {
+      "main": [
+        [
+          {
+            "node": "Check Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Select Top 5 Stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Top 5 Stories": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Stories": {
+      "main": [
+        [
+          {
+            "node": "Generate Long-Form Script",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Teaser Script",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search Images (Pexels)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-01-29T13:03:22.000Z",
+  "versionId": "1"
+}
