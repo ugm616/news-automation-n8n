@@ -272,3 +272,31 @@ COMMENT ON TABLE processed_stories IS 'Tracks all processed news stories and the
 COMMENT ON TABLE api_usage IS 'Tracks API usage and costs for monitoring';
 COMMENT ON TABLE workflow_executions IS 'Tracks n8n workflow execution history';
 COMMENT ON TABLE rss_feeds IS 'Manages RSS feed sources';
+
+-- Channels table
+CREATE TABLE channels (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    niche VARCHAR(100) NOT NULL,
+    config JSONB NOT NULL,
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Update processed_stories table
+ALTER TABLE processed_stories ADD COLUMN channel_id INTEGER REFERENCES channels(id);
+
+-- Channel performance view
+CREATE VIEW channel_performance AS
+SELECT 
+    c.name as channel_name,
+    c.niche,
+    COUNT(ps.id) as total_stories,
+    SUM(ps.views_total) as total_views,
+    SUM(ps.revenue_earned) as total_revenue,
+    AVG(ps.ctr_rate) as avg_ctr
+FROM channels c
+LEFT JOIN processed_stories ps ON ps.channel_id = c.id
+GROUP BY c.id, c.name, c.niche
+ORDER BY total_revenue DESC;
