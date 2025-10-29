@@ -1,0 +1,69 @@
+{
+  "channel": {
+    "id": "",
+    "name": "Example Channel",
+    "niche": "example",
+    "description": "Template channel configuration",
+    "created_at": "",
+    "branding": {
+      "primary_color": "#667eea",
+      "secondary_color": "#764ba2",
+      "logo_path": "./assets/logos/logo.png",
+      "watermark_path": "./assets/watermarks/watermark.png",
+      "intro_video": "./assets/intros/intro.mp4",
+      "outro_video": "./assets/outros/outro.mp4"
+    },
+    "voice": {
+      "provider": "elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "style": "professional_news",
+      "speed": 1.0,
+      "stability": 0.75,
+      "similarity_boost": 0.75
+    }
+  },
+  "content": {
+    "stories_per_cycle": 5,
+    "schedule_interval_hours": 2,
+    "longform_duration": {
+      "min": 600,
+      "max": 900
+    },
+    "teaser_duration": 30,
+    "keywords": [],
+    "exclude_keywords": ["opinion", "review", "sponsored"],
+    "target_audience": "18-45",
+    "tone": "engaging_professional"
+  },
+  "platforms": {
+    "rumble": {
+      "enabled": true,
+      "username": "",
+      "license": "video_management",
+      "primary": true
+    },
+    "youtube": {
+      "enabled": false,
+      "channel_id": "",
+      "category": "News"
+    },
+    "tiktok": {
+      "enabled": false,
+      "username": ""
+    },
+    "instagram": {
+      "enabled": false,
+      "username": ""
+    },
+    "facebook": {
+      "enabled": false,
+      "page_id": ""
+    }
+  },
+  "monetization": {
+    "primary_platform": "rumble",
+    "target_cpm": 7.50,
+    "revenue_goal_monthly": 10000,
+    "revenue_goal_daily": 333
+  }
+}
