@@ -1,0 +1,206 @@
+VOICE GENERATION INSTRUCTIONS
+==============================
+
+These instructions guide the configuration of text-to-speech (TTS) services for optimal news video narration.
+
+ELEVENLABS CONFIGURATION
+------------------------
+
+Recommended Voice IDs:
+- Rachel (21m00Tcm4TlvDq8ikWAM): Professional female news anchor
+- Adam (pNInz6obpgDQGcFmaJgB): Professional male news anchor  
+- Antoni (ErXwobaYiN019PkySvjV): Authoritative male voice
+
+Voice Settings:
+{
+  "stability": 0.75,
+  "similarity_boost": 0.75,
+  "style": 0.0,
+  "use_speaker_boost": true
+}
+
+Explanation:
+- Stability (0.75): Consistent tone, professional delivery
+- Similarity Boost (0.75): Clear voice matching
+- Style (0.0): Neutral delivery for news
+- Speaker Boost: Enhances clarity and presence
+
+Model: eleven_monolingual_v1 (best for English news)
+
+GOOGLE CLOUD TTS CONFIGURATION
+-------------------------------
+
+Recommended Voices:
+- en-US-Neural2-D: Female news anchor
+- en-US-Neural2-A: Male news anchor
+- en-US-Neural2-F: Male authoritative
+
+Voice Parameters:
+{
+  "languageCode": "en-US",
+  "name": "en-US-Neural2-D",
+  "ssmlGender": "FEMALE"
+}
+
+Audio Config:
+{
+  "audioEncoding": "MP3",
+  "speakingRate": 1.0,
+  "pitch": 0.0,
+  "volumeGainDb": 0.0,
+  "effectsProfileId": ["handset-class-device"]
+}
+
+Explanation:
+- Speaking Rate (1.0): Normal speed (0.9 for slower, 1.1 for faster)
+- Pitch (0.0): Natural pitch (range: -20.0 to 20.0)
+- Volume Gain (0.0): Normal volume
+- Effects Profile: Optimized for clear audio playback
+
+SCRIPT PREPROCESSING
+--------------------
+
+Before sending to TTS, process the script:
+
+1. Expand Abbreviations:
+   - Dr. → Doctor
+   - Mr. → Mister
+   - Mrs. → Missus
+   - St. → Street
+   - etc. → and so forth
+
+2. Number Formatting:
+   - 25 → twenty-five
+   - $1,000 → one thousand dollars
+   - 2025 → twenty twenty-five
+   - 3:00 PM → three PM
+
+3. Acronyms:
+   - USA → U.S.A. (with periods for better pronunciation)
+   - FBI → F.B.I.
+   - CEO → C.E.O.
+
+4. Punctuation for Pauses:
+   - Use commas for natural breathing points
+   - Use periods for sentence breaks
+   - Use ellipsis (...) for dramatic pause
+   - Use em dash (—) for interruption effect
+
+5. Emphasis (if using SSML):
+   <emphasis level="strong">important point</emphasis>
+   <break time="500ms"/> (for dramatic pause)
+
+VOICE DELIVERY GUIDELINES
+--------------------------
+
+Long-Form Videos (Rumble):
+- Tone: Professional, authoritative, trustworthy
+- Pacing: Moderate (not too fast)
+- Energy: Consistent, engaging but not overhyped
+- Pauses: Natural breathing, sentence breaks
+- Inflection: Professional news anchor style
+
+Short-Form Teasers (Social Media):
+- Tone: Engaging, energetic, conversational
+- Pacing: Slightly faster for urgency
+- Energy: High energy, compelling
+- Pauses: Minimal, maintain momentum
+- Inflection: More dynamic, attention-grabbing
+
+QUALITY CONTROL
+---------------
+
+After generating audio, check:
+✓ Clear pronunciation of all words
+✓ Natural sentence flow and rhythm
+✓ Appropriate pacing (not too fast/slow)
+✓ Consistent volume throughout
+✓ No robotic artifacts or glitches
+✓ Proper emphasis on key words
+✓ Natural pauses at punctuation
+
+If quality issues:
+- Adjust stability/similarity settings
+- Rewrite problematic sentences
+- Add SSML markup for pronunciation
+- Try alternative voice
+
+AUDIO POST-PROCESSING
+---------------------
+
+Optional enhancements using FFmpeg:
+
+1. Normalize Volume:
+   ffmpeg -i input.mp3 -af loudnorm output.mp3
+
+2. Remove Silence:
+   ffmpeg -i input.mp3 -af silenceremove=1:0:-50dB output.mp3
+
+3. Add Background Music:
+   ffmpeg -i voice.mp3 -i music.mp3 -filter_complex \
+   "[1:a]volume=0.15[music];[0:a][music]amix=inputs=2[out]" \
+   -map "[out]" output.mp3
+
+4. Enhance Clarity:
+   ffmpeg -i input.mp3 -af "equalizer=f=3000:t=h:w=200:g=3" output.mp3
+
+TESTING CHECKLIST
+-----------------
+
+Before using in production:
+□ Test with actual news scripts
+□ Listen to full audio playback
+□ Check pronunciation of proper nouns
+□ Verify appropriate emotion/tone
+□ Ensure consistent quality across multiple generations
+□ Compare with target news anchor style
+□ Get feedback from test audience
+
+COST OPTIMIZATION
+-----------------
+
+ElevenLabs:
+- Cache frequently used phrases
+- Batch generate multiple scripts
+- Use appropriate quality tier
+- Monitor character usage
+
+Google TTS:
+- Use Standard voices for testing
+- Switch to Neural2 for production
+- Leverage free tier (1M chars/month)
+- Cache generated audio files
+
+TROUBLESHOOTING
+---------------
+
+Issue: Robotic voice
+Fix: Increase stability, use Neural/Premium voices
+
+Issue: Wrong pronunciation
+Fix: Use SSML phonetic spelling, respell word
+
+Issue: Unnatural pacing
+Fix: Add commas/periods, adjust speaking rate
+
+Issue: Flat delivery
+Fix: Increase style setting (ElevenLabs), adjust pitch variance
+
+Issue: Inconsistent volume
+Fix: Use loudnorm filter, check audio levels
+
+VOICE SELECTION CRITERIA
+-------------------------
+
+Choose voice based on:
+- Target audience demographics
+- Brand identity/personality
+- Content category (hard news vs. entertainment)
+- Platform (professional for YouTube vs. casual for TikTok)
+- Accessibility (clear for all listeners)
+
+For News Automation:
+→ Recommend Rachel (ElevenLabs) or en-US-Neural2-D (Google)
+→ Professional, trusted, clear articulation
+→ Appeals to broad audience
+→ Consistent brand voice across videos
