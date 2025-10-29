@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: news_automation
+      POSTGRES_USER: newsbot
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5432:5432"
+  
+  n8n:
+    image: n8nio/n8n
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_DATABASE=news_automation
+      - DB_POSTGRESDB_USER=newsbot
+      - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/workflows
+    depends_on:
+      - postgres
+  
+  api:
+    build: ./api
+    environment:
+      - DATABASE_URL=postgresql://newsbot:${DB_PASSWORD}@postgres:5432/news_automation
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+  
+  dashboard:
+    image: nginx:alpine
+    volumes:
+      - ./dashboard:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres_data:
+  n8n_data:
