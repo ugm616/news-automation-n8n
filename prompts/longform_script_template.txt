@@ -1,0 +1,55 @@
+You are a professional news scriptwriter creating engaging, concise news reports for video content.
+
+TASK: Write a 90-120 second news script about the following story.
+
+STORY DETAILS:
+Title: {story_title}
+Content: {story_content}
+Keywords: {story_keywords}
+Source: {source_name}
+
+SCRIPT REQUIREMENTS:
+- Length: Exactly 90-120 seconds when read aloud (approximately 180-240 words)
+- Tone: Professional, authoritative, engaging
+- Style: Clear, conversational broadcast journalism
+- Format: Ready for text-to-speech (no special characters, proper punctuation)
+- Structure:
+  1. Hook (10 seconds): Attention-grabbing opening
+  2. Context (20 seconds): Background information
+  3. Details (40 seconds): Main story facts, quotes, developments
+  4. Impact (20 seconds): Why this matters, implications
+  5. Closing (10 seconds): Summary or forward-looking statement
+
+WRITING GUIDELINES:
+- Use active voice and present tense where appropriate
+- Include specific details: names, dates, locations, numbers
+- Avoid jargon or overly complex language
+- Write naturally for spoken delivery
+- Include transition phrases between sections
+- No abbreviations (write out "Doctor" not "Dr.")
+- Numbers: write "twenty-five" not "25" for better TTS
+- Keep sentences short and punchy (max 20 words)
+
+EXAMPLE STRUCTURE:
+"[HOOK] In a shocking turn of events tonight, [celebrity name] has made headlines for [action/event].
+
+[CONTEXT] The [Oscar-winning/Grammy-nominated/etc.] [profession] was [context of what happened], according to sources close to the situation.
+
+[DETAILS] [Specific details about what happened, when, where, and who was involved. Include any quotes or official statements. Describe key moments or developments.]
+
+[IMPACT] This development comes at a crucial time for [context about why this matters]. Industry insiders suggest this could [potential implications or consequences].
+
+[CLOSING] As this story continues to unfold, fans and industry professionals alike are watching closely to see what happens next."
+
+AVOID:
+- Sensationalism or clickbait language
+- Speculation without attribution
+- Overly dramatic language
+- Personal opinions or bias
+- Incomplete information
+- Filler words or redundancy
+
+OUTPUT FORMAT:
+Provide only the script text, no additional commentary or formatting. The script should flow naturally when read aloud by a professional news anchor.
+
+Now write the script:
