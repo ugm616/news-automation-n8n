@@ -1,59 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>News Automation Dashboard</title>
-    <style>
-        body { font-family: Arial; padding: 20px; background: #1a1a1a; color: #fff; }
-        .channel-card { background: #2a2a2a; padding: 20px; margin: 10px; border-radius: 8px; }
-        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .stat { background: #3a3a3a; padding: 15px; border-radius: 4px; text-align: center; }
-        .stat-value { font-size: 32px; font-weight: bold; color: #4CAF50; }
-        .stat-label { font-size: 12px; color: #999; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Automation Dashboard - Multi-Channel Control Center</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
 </head>
 <body>
-    <h1>📊 Multi-Channel Dashboard</h1>
-    
-    <div id="channels"></div>
-    
-    <script>
-        // Fetch and display all channels
-        async function loadChannels() {
-            const response = await fetch('/api/channels');
-            const channels = await response.json();
-            
-            const container = document.getElementById('channels');
-            
-            channels.forEach(channel => {
-                const card = `
-                    <div class="channel-card">
-                        <h2>${channel.name} (${channel.niche})</h2>
-                        <div class="stats">
-                            <div class="stat">
-                                <div class="stat-value">${channel.stats.videos_today}</div>
-                                <div class="stat-label">Videos Today</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">${channel.stats.total_views}</div>
-                                <div class="stat-label">Total Views</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">$${channel.stats.revenue_today}</div>
-                                <div class="stat-label">Revenue Today</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">${channel.stats.ctr}%</div>
-                                <div class="stat-label">CTR</div>
-                            </div>
-                        </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">📰</span>
+                <h1>News Automation</h1>
+                <span class="version">v1.0.0</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="refreshDashboard()">
+                    <span class="icon">🔄</span> Refresh
+                </button>
+                <button class="btn btn-primary" onclick="showCreateChannel()">
+                    <span class="icon">➕</span> New Channel
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- System Overview Cards -->
+        <section class="overview-section">
+            <h2 class="section-title">
+                <span class="icon">📊</span> System Overview
+            </h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span>📺</span>
                     </div>
-                `;
-                container.innerHTML += card;
-            });
-        }
-        
-        loadChannels();
-        setInterval(loadChannels, 60000); // Refresh every minute
-    </script>
+                    <div class="stat-content">
+                        <h3 class="stat-label">Active Channels</h3>
+                        <p class="stat-value" id="total-channels">-</p>
+                        <p class="stat-change">
+                            <span class="change-indicator positive" id="channels-change">-</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <span>🎬</span>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-label">Videos Today</h3>
+                        <p class="stat-value" id="videos-today">-</p>
+                        <p class="stat-change">
+                            <span class="change-indicator positive" id="videos-change">-</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <span>👁️</span>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-label">Total Views</h3>
+                        <p class="stat-value" id="total-views">-</p>
+                        <p class="stat-change">
+                            <span class="change-indicator positive" id="views-change">-</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <span>💰</span>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-label">Revenue Today</h3>
+                        <p class="stat-value" id="revenue-today">-</p>
+                        <p class="stat-change">
+                            <span class="change-indicator positive" id="revenue-change">-</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Channels Grid -->
+        <section class="channels-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">🎯</span> Channels
+                </h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterChannels('all')">All</button>
+                    <button class="filter-btn" onclick="filterChannels('active')">Active</button>
+                    <button class="filter-btn" onclick="filterChannels('inactive')">Inactive</button>
+                </div>
+            </div>
+            
+            <div class="channels-grid" id="channels-grid">
+                <!-- Channel cards will be inserted here -->
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading channels...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="activity-section">
+            <h2 class="section-title">
+                <span class="icon">⚡</span> Recent Activity
+            </h2>
+            <div class="activity-feed" id="activity-feed">
+                <!-- Activity items will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Top Performers -->
+        <section class="performers-section">
+            <h2 class="section-title">
+                <span class="icon">🏆</span> Top Performing Channels
+            </h2>
+            <div class="performers-list" id="performers-list">
+                <!-- Top performers will be inserted here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal for creating new channel -->
+    <div class="modal" id="create-channel-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Channel</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-info">
+                    Creating a new channel via the dashboard is coming soon! 
+                    For now, please use the command-line tool:
+                </p>
+                <div class="code-block">
+                    <code>./quick_start.sh</code>
+                </div>
+                <p class="modal-info">
+                    Or manually:
+                </p>
+                <div class="code-block">
+                    <code>./scripts/channel_manager.sh create &lt;niche&gt; "&lt;Channel Name&gt;"</code>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>News Automation System - Built with ❤️ by ugm616</p>
+        <p class="footer-links">
+            <a href="https://github.com/ugm616/news-automation-n8n" target="_blank">GitHub</a>
+            <span>•</span>
+            <a href="#" onclick="showDocs()">Documentation</a>
+            <span>•</span>
+            <a href="#" onclick="showSettings()">Settings</a>
+        </p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
 </body>
 </html>
