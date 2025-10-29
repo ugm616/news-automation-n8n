@@ -1,0 +1,191 @@
+# ============================================
+# News Automation System - Git Ignore File
+# ============================================
+
+# Environment Variables (CRITICAL - NEVER COMMIT)
+.env
+.env.local
+.env.*.local
+*.env
+
+# API Keys and Secrets
+secrets/
+credentials/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# n8n Data
+n8n-data/
+.n8n/
+*_n8n/
+
+# Output Files
+output/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.mp3
+*.wav
+*.aac
+*.ogg
+*.srt
+*.vtt
+*.ass
+
+# Image Cache
+images/
+image_cache/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+
+# Temporary Files
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+database/*.sql.backup
+pg_dump_*
+
+# Node Modules
+node_modules/
+jspm_packages/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# Backup Files
+*.backup
+*.bak
+*~
+
+# Distribution / Build
+dist/
+build/
+*.tar.gz
+*.zip
+
+# Package Manager Files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Test Coverage
+coverage/
+.nyc_output/
+
+# Misc
+.cache/
+.parcel-cache/
+.vercel
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+
+# Video Templates (keep structure, ignore actual files)
+templates/*.mp4
+templates/*.mov
+templates/*.png
+templates/*.jpg
+
+# Workflow Exports (except main)
+workflows/*_backup_*.json
+workflows/*_export_*.json
+
+# Database Backups
+database/backups/
+*.sql.gz
+
+# API Response Cache
+api_cache/
+.api_cache/
+
+# FFmpeg Temp Files
+ffmpeg_temp/
+concat_list.txt
+
+# Puppeteer
+.puppeteer/
+puppeteer-*
+
+# Scripts Output
+scripts/output/
+scripts/temp/
+scripts/*.mp4
+scripts/*.mp3
+
+# Error Screenshots
+error_*.png
+screenshot_*.png
+
+# Debug Files
+debug/
+debug_*.json
+
+# Local Configuration Overrides
+config/local.json
+config/*.local.json
+
+# Keep These Files
+!.gitignore
+!.env.example
+!config/.env.example
+!config/rss_feeds.example.json
+!README.md
+!LICENSE
+!*.md
+
+# Keep Directory Structure
+!output/.gitkeep
+!images/.gitkeep
+!logs/.gitkeep
+!temp/.gitkeep
