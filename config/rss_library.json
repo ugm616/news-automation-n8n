@@ -1,44 +1,434 @@
 {
   "niches": {
     "celebrity": [
-      {"name": "E! News", "url": "https://www.eonline.com/syndication/feeds/rssfeeds/topstories.xml"},
-      {"name": "TMZ", "url": "https://www.tmz.com/rss.xml"},
-      {"name": "People", "url": "https://people.com/feed/"}
+      {
+        "name": "E! News",
+        "url": "https://www.eonline.com/syndication/feeds/rssfeeds/topstories.xml",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "TMZ",
+        "url": "https://www.tmz.com/rss.xml",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "People Magazine",
+        "url": "https://people.com/feed/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Us Weekly",
+        "url": "https://www.usmagazine.com/feed/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Page Six",
+        "url": "https://pagesix.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Just Jared",
+        "url": "http://www.justjared.com/feed/",
+        "priority": 3,
+        "language": "en"
+      }
     ],
     "sports": [
-      {"name": "ESPN", "url": "https://www.espn.com/espn/rss/news"},
-      {"name": "Sports Illustrated", "url": "https://www.si.com/rss/si_topstories.rss"},
-      {"name": "Bleacher Report", "url": "https://bleacherreport.com/articles/feed"}
+      {
+        "name": "ESPN",
+        "url": "https://www.espn.com/espn/rss/news",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Sports Illustrated",
+        "url": "https://www.si.com/rss/si_topstories.rss",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Bleacher Report",
+        "url": "https://bleacherreport.com/articles/feed",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "CBS Sports",
+        "url": "https://www.cbssports.com/rss/headlines",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "The Athletic",
+        "url": "https://theathletic.com/feeds/rss/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Yahoo Sports",
+        "url": "https://sports.yahoo.com/rss/",
+        "priority": 3,
+        "language": "en"
+      }
     ],
     "politics": [
-      {"name": "Politico", "url": "https://www.politico.com/rss/politics08.xml"},
-      {"name": "The Hill", "url": "https://thehill.com/feed/"},
-      {"name": "Reuters Politics", "url": "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"}
+      {
+        "name": "Politico",
+        "url": "https://www.politico.com/rss/politics08.xml",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "The Hill",
+        "url": "https://thehill.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Reuters Politics",
+        "url": "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "CNN Politics",
+        "url": "http://rss.cnn.com/rss/cnn_allpolitics.rss",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Fox News Politics",
+        "url": "https://moxie.foxnews.com/google-publisher/politics.xml",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Associated Press Politics",
+        "url": "https://www.apnews.com/apf-politics",
+        "priority": 3,
+        "language": "en"
+      }
     ],
     "music": [
-      {"name": "Billboard", "url": "https://www.billboard.com/feed/"},
-      {"name": "Rolling Stone", "url": "https://www.rollingstone.com/feed/"},
-      {"name": "Pitchfork", "url": "https://pitchfork.com/rss/news/"}
+      {
+        "name": "Billboard",
+        "url": "https://www.billboard.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Rolling Stone",
+        "url": "https://www.rollingstone.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Pitchfork",
+        "url": "https://pitchfork.com/rss/news/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "NME",
+        "url": "https://www.nme.com/feed",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Consequence",
+        "url": "https://consequence.net/feed/",
+        "priority": 3,
+        "language": "en"
+      },
+      {
+        "name": "Stereogum",
+        "url": "https://www.stereogum.com/feed/",
+        "priority": 3,
+        "language": "en"
+      }
     ],
     "tech": [
-      {"name": "TechCrunch", "url": "https://techcrunch.com/feed/"},
-      {"name": "The Verge", "url": "https://www.theverge.com/rss/index.xml"},
-      {"name": "Ars Technica", "url": "http://feeds.arstechnica.com/arstechnica/index"}
+      {
+        "name": "TechCrunch",
+        "url": "https://techcrunch.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "The Verge",
+        "url": "https://www.theverge.com/rss/index.xml",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Ars Technica",
+        "url": "http://feeds.arstechnica.com/arstechnica/index",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Wired",
+        "url": "https://www.wired.com/feed/rss",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Engadget",
+        "url": "https://www.engadget.com/rss.xml",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "The Next Web",
+        "url": "https://thenextweb.com/feed/",
+        "priority": 3,
+        "language": "en"
+      },
+      {
+        "name": "Mashable Tech",
+        "url": "https://mashable.com/feeds/rss/tech",
+        "priority": 3,
+        "language": "en"
+      }
     ],
     "finance": [
-      {"name": "Bloomberg", "url": "https://www.bloomberg.com/feed/podcast/bloomberg-businessweek"},
-      {"name": "CNBC", "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"},
-      {"name": "MarketWatch", "url": "https://www.marketwatch.com/rss/"}
+      {
+        "name": "Bloomberg",
+        "url": "https://www.bloomberg.com/feed/podcast/bloomberg-businessweek",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "CNBC",
+        "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "MarketWatch",
+        "url": "https://www.marketwatch.com/rss/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Financial Times",
+        "url": "https://www.ft.com/?format=rss",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Forbes",
+        "url": "https://www.forbes.com/business/feed/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Business Insider",
+        "url": "https://www.businessinsider.com/rss",
+        "priority": 3,
+        "language": "en"
+      },
+      {
+        "name": "Wall Street Journal",
+        "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
+        "priority": 1,
+        "language": "en"
+      }
     ],
     "gaming": [
-      {"name": "IGN", "url": "https://feeds.ign.com/ign/news"},
-      {"name": "GameSpot", "url": "https://www.gamespot.com/feeds/mashup/"},
-      {"name": "Polygon", "url": "https://www.polygon.com/rss/index.xml"}
+      {
+        "name": "IGN",
+        "url": "https://feeds.ign.com/ign/news",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "GameSpot",
+        "url": "https://www.gamespot.com/feeds/mashup/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Polygon",
+        "url": "https://www.polygon.com/rss/index.xml",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Kotaku",
+        "url": "https://kotaku.com/rss",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "PC Gamer",
+        "url": "https://www.pcgamer.com/rss/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Eurogamer",
+        "url": "https://www.eurogamer.net/?format=rss",
+        "priority": 3,
+        "language": "en"
+      },
+      {
+        "name": "Rock Paper Shotgun",
+        "url": "https://www.rockpapershotgun.com/feed",
+        "priority": 3,
+        "language": "en"
+      }
     ],
     "crypto": [
-      {"name": "CoinDesk", "url": "https://www.coindesk.com/arc/outboundfeeds/rss/"},
-      {"name": "CoinTelegraph", "url": "https://cointelegraph.com/rss"},
-      {"name": "Decrypt", "url": "https://decrypt.co/feed"}
+      {
+        "name": "CoinDesk",
+        "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "CoinTelegraph",
+        "url": "https://cointelegraph.com/rss",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Decrypt",
+        "url": "https://decrypt.co/feed",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "The Block",
+        "url": "https://www.theblockcrypto.com/rss.xml",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Bitcoin Magazine",
+        "url": "https://bitcoinmagazine.com/.rss/full/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Crypto Briefing",
+        "url": "https://cryptobriefing.com/feed/",
+        "priority": 3,
+        "language": "en"
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Entertainment Weekly",
+        "url": "https://ew.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "The Hollywood Reporter",
+        "url": "https://www.hollywoodreporter.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Variety",
+        "url": "https://variety.com/feed/",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Deadline Hollywood",
+        "url": "https://deadline.com/feed/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Collider",
+        "url": "https://collider.com/feed/",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "ComingSoon",
+        "url": "https://www.comingsoon.net/feed",
+        "priority": 3,
+        "language": "en"
+      }
+    ],
+    "food": [
+      {
+        "name": "Food Network",
+        "url": "https://www.foodnetwork.com/feeds/feed.rss",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Bon Appetit",
+        "url": "https://www.bonappetit.com/feed/rss",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Eater",
+        "url": "https://www.eater.com/rss/index.xml",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Serious Eats",
+        "url": "https://www.seriouseats.com/feed/rss",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "Food52",
+        "url": "https://food52.com/blog.rss",
+        "priority": 3,
+        "language": "en"
+      }
+    ],
+    "travel": [
+      {
+        "name": "Travel + Leisure",
+        "url": "https://www.travelandleisure.com/syndication/feed",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Conde Nast Traveler",
+        "url": "https://www.cntraveler.com/feed/rss",
+        "priority": 1,
+        "language": "en"
+      },
+      {
+        "name": "Lonely Planet",
+        "url": "https://www.lonelyplanet.com/news/feed",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "National Geographic Travel",
+        "url": "https://www.nationalgeographic.com/travel/rss",
+        "priority": 2,
+        "language": "en"
+      },
+      {
+        "name": "The Points Guy",
+        "url": "https://thepointsguy.com/feed/",
+        "priority": 3,
+        "language": "en"
+      }
     ]
+  },
+  "metadata": {
+    "last_updated": "2025-01-29",
+    "total_niches": 11,
+    "total_feeds": 77,
+    "notes": "Priority: 1=highest, 3=lowest. Feeds are vetted for reliability and content quality."
   }
 }
