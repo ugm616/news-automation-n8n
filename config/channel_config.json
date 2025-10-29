@@ -1,0 +1,74 @@
+{
+  "channel": {
+    "name": "Celebrity News Daily",
+    "niche": "celebrity",
+    "description": "Breaking celebrity news and entertainment updates",
+    "branding": {
+      "primary_color": "#FF0000",
+      "secondary_color": "#000000",
+      "logo_path": "./assets/logos/celebrity_logo.png",
+      "watermark_path": "./assets/watermarks/celebrity_watermark.png",
+      "intro_video": "./assets/intros/celebrity_intro.mp4",
+      "outro_video": "./assets/outros/celebrity_outro.mp4"
+    },
+    "voice": {
+      "provider": "elevenlabs",
+      "voice_id": "21m00Tcm4TlvDq8ikWAM",
+      "style": "professional_news",
+      "speed": 1.0
+    }
+  },
+  "content": {
+    "stories_per_cycle": 5,
+    "longform_duration": {
+      "min": 600,
+      "max": 900
+    },
+    "teaser_duration": 30,
+    "keywords": ["celebrity", "entertainment", "hollywood", "music", "movies"],
+    "exclude_keywords": ["politics", "sports", "opinion"],
+    "target_audience": "18-45",
+    "tone": "engaging_professional"
+  },
+  "rss_feeds": [
+    {
+      "name": "E! News",
+      "url": "https://www.eonline.com/syndication/feeds/rssfeeds/topstories.xml",
+      "priority": 1
+    },
+    {
+      "name": "TMZ",
+      "url": "https://www.tmz.com/rss.xml",
+      "priority": 1
+    }
+  ],
+  "platforms": {
+    "rumble": {
+      "enabled": true,
+      "username": "celebrity_news_daily",
+      "license": "video_management"
+    },
+    "youtube": {
+      "enabled": true,
+      "channel_id": "UC...",
+      "category": "Entertainment"
+    },
+    "tiktok": {
+      "enabled": true,
+      "username": "celebritynews"
+    },
+    "instagram": {
+      "enabled": true,
+      "username": "celebritynewsdaily"
+    },
+    "facebook": {
+      "enabled": true,
+      "page_id": "..."
+    }
+  },
+  "monetization": {
+    "primary_platform": "rumble",
+    "target_cpm": 7.50,
+    "revenue_goal_monthly": 10000
+  }
+}
